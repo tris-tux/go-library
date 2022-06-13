@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  library-postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=secret
+      - POSTGRES_DB=library
+    # volumes:
+    #   - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+  library-backend:
+    build: ./backend
+    ports:
+      - 8080:8080
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=secret
+      - DB_HOST=library-postgres
+      - DB_PORT=5432
+      - DB_DATABASE=library
+    depends_on:
+      - task-postgres
