@@ -8,4 +8,4 @@
 # backend/service/jwt.go
 # backend/service/visitor.go
 # backend/helper/response.go
-postgres/init.sql
+# postgres/init.sql

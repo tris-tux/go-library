@@ -1,0 +1,14 @@
+Big data adalah istilah yang menggambarkan volume besar data – baik terstruktur maupun tidak terstruktur – yang membanjiri bisnis sehari-hari. Namun bukan jumlah data yang penting. Apa yang dilakukan organisasi dengan data itulah yang penting. Big data dapat dianalisis demi pemahaman yang mengarah kepada keputusan dan gerakan bisnis strategis yang lebih baik.
+
+NoSQL adalah singkatan dari Not Only SQL. Database management system ini bersifat tanpa relasi (non-relational). Artinya, NoSQL bisa mengelola database dengan skema yang fleksibel dan tidak membutuhkan query yang kompleks.
+
+
+
+Amazon Web Service (AWS)
+Amazon RDS – Amazon’s Relational Database Service runs on either Oracle, SQL or MySQL server instances.
+Amazon SimpleDB - This is primarily a schema-less database that is meant to handle smaller workloads.
+Amazon DynamoDB - This falls on the NoSQL databases (SSD), capable of automatically replicating workloads across three availability zones.
+Microsoft Azure
+Google Cloud Platform (GCP)
+etc
+setaiap service memiliki fungsing yang berbeda
