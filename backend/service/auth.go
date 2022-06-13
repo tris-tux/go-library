@@ -12,8 +12,8 @@ import (
 //AuthService is a contract about something that this service can do
 type AuthService interface {
 	VerifyCredential(email string, password string) interface{}
-	CreateVisitor(visitor schema.RegisterDTO) schema.Visitor
-	FindByEmail(email string) schema.Visitor
+	CreateVisitor(visitor schema.RegisterDTO) schema.User
+	FindByEmail(email string) schema.User
 	IsDuplicateEmail(email string) bool
 }
 
@@ -30,7 +30,7 @@ func NewAuthService(visitorRep repository.VisitorRepository) AuthService {
 
 func (s *authService) VerifyCredential(email string, password string) interface{} {
 	res := s.visitorRepository.VerifyCredential(email, password)
-	if v, ok := res.(schema.Visitor); ok {
+	if v, ok := res.(schema.User); ok {
 		comparedPassword := comparePassword(v.Password, []byte(password))
 		if v.Email == email && comparedPassword {
 			return res
@@ -40,8 +40,8 @@ func (s *authService) VerifyCredential(email string, password string) interface{
 	return false
 }
 
-func (s *authService) CreateVisitor(visitor schema.RegisterDTO) schema.Visitor {
-	visitorToCreate := schema.Visitor{}
+func (s *authService) CreateVisitor(visitor schema.RegisterDTO) schema.User {
+	visitorToCreate := schema.User{}
 	err := smapping.FillStruct(&visitorToCreate, smapping.MapFields(&visitor))
 	if err != nil {
 		log.Fatalf("Failed map %v", err)
@@ -50,7 +50,7 @@ func (s *authService) CreateVisitor(visitor schema.RegisterDTO) schema.Visitor {
 	return res
 }
 
-func (s *authService) FindByEmail(email string) schema.Visitor {
+func (s *authService) FindByEmail(email string) schema.User {
 	return s.visitorRepository.FindByEmail(email)
 }
 

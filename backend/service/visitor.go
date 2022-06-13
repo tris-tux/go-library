@@ -10,8 +10,8 @@ import (
 
 //VisitorService is a contract.....
 type VisitorService interface {
-	Update(visitor schema.VisitorUpdateDTO) schema.Visitor
-	Profile(visitorID string) schema.Visitor
+	Update(visitor schema.VisitorUpdateDTO) schema.User
+	Profile(visitorID string) schema.User
 }
 
 type visitorService struct {
@@ -25,8 +25,8 @@ func NewVisitorService(visitorRepo repository.VisitorRepository) VisitorService 
 	}
 }
 
-func (s *visitorService) Update(visitor schema.VisitorUpdateDTO) schema.Visitor {
-	visitorToUpdate := schema.Visitor{}
+func (s *visitorService) Update(visitor schema.VisitorUpdateDTO) schema.User {
+	visitorToUpdate := schema.User{}
 	err := smapping.FillStruct(&visitorToUpdate, smapping.MapFields(&visitor))
 	if err != nil {
 		log.Fatalf("Failed map %v:", err)
@@ -35,6 +35,6 @@ func (s *visitorService) Update(visitor schema.VisitorUpdateDTO) schema.Visitor 
 	return updatedVisitor
 }
 
-func (s *visitorService) Profile(visitorID string) schema.Visitor {
+func (s *visitorService) Profile(visitorID string) schema.User {
 	return s.visitorRepository.ProfileVisitor(visitorID)
 }

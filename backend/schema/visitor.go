@@ -18,6 +18,12 @@ type Visitor struct {
 	Kodepos         string `json:"kodepos"`
 	KdJenisId       string `json:"kd_jenis_id"`
 	PhotoDiriktp    string `json:"photo_diri_ktp"`
-	Password        string `gorm:"->;<-;not null" json:"-"`
-	Token           string `gorm:"-" json:"token,omitempty"`
+}
+
+type User struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Password string `gorm:"->;<-;not null" json:"-"`
+	Token    string `gorm:"-" json:"token,omitempty"`
 }

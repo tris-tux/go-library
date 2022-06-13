@@ -10,12 +10,12 @@ import (
 
 //VisitorRepository is contract what visitorRepository can do to db
 type VisitorRepository interface {
-	InsertVisitor(visitor schema.Visitor) schema.Visitor
-	UpdateVisitor(visitor schema.Visitor) schema.Visitor
+	InsertVisitor(visitor schema.User) schema.User
+	UpdateVisitor(visitor schema.User) schema.User
 	VerifyCredential(email string, password string) interface{}
 	IsDuplicateEmail(email string) (tx *gorm.DB)
-	FindByEmail(email string) schema.Visitor
-	ProfileVisitor(visitorID string) schema.Visitor
+	FindByEmail(email string) schema.User
+	ProfileVisitor(visitorID string) schema.User
 }
 
 type visitorConnection struct {
@@ -29,18 +29,18 @@ func NewVisitorRepository(db *gorm.DB) VisitorRepository {
 	}
 }
 
-func (db *visitorConnection) InsertVisitor(visitor schema.Visitor) schema.Visitor {
+func (db *visitorConnection) InsertVisitor(visitor schema.User) schema.User {
 	visitor.Password = hashAndSalt([]byte(visitor.Password))
 	db.connection.Save(&visitor)
 	return visitor
 }
 
-func (db *visitorConnection) UpdateVisitor(visitor schema.Visitor) schema.Visitor {
+func (db *visitorConnection) UpdateVisitor(visitor schema.User) schema.User {
 	if visitor.Password != "" {
 		visitor.Password = hashAndSalt([]byte(visitor.Password))
 	} else {
-		var tempVisitor schema.Visitor
-		db.connection.Find(&tempVisitor, visitor.NoIdentitas)
+		var tempVisitor schema.User
+		db.connection.Find(&tempVisitor, visitor.ID)
 		visitor.Password = tempVisitor.Password
 	}
 
@@ -49,7 +49,7 @@ func (db *visitorConnection) UpdateVisitor(visitor schema.Visitor) schema.Visito
 }
 
 func (db *visitorConnection) VerifyCredential(email string, password string) interface{} {
-	var visitor schema.Visitor
+	var visitor schema.User
 	res := db.connection.Where("email = ?", email).Take(&visitor)
 	if res.Error == nil {
 		return visitor
@@ -58,18 +58,18 @@ func (db *visitorConnection) VerifyCredential(email string, password string) int
 }
 
 func (db *visitorConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
-	var visitor schema.Visitor
+	var visitor schema.User
 	return db.connection.Where("email = ?", email).Take(&visitor)
 }
 
-func (db *visitorConnection) FindByEmail(email string) schema.Visitor {
-	var visitor schema.Visitor
+func (db *visitorConnection) FindByEmail(email string) schema.User {
+	var visitor schema.User
 	db.connection.Where("email = ?", email).Take(&visitor)
 	return visitor
 }
 
-func (db *visitorConnection) ProfileVisitor(visitorID string) schema.Visitor {
-	var visitor schema.Visitor
+func (db *visitorConnection) ProfileVisitor(visitorID string) schema.User {
+	var visitor schema.User
 	db.connection.Preload("Books").Preload("Books.Visitor").Find(&visitor, visitorID)
 	return visitor
 }

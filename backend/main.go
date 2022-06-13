@@ -20,6 +20,7 @@ func main() {
 	}
 
 	db.AutoMigrate(&schema.Visitor{})
+	db.AutoMigrate(&schema.User{})
 
 	visitorRepository := repository.NewVisitorRepository(db)
 	jwtService := service.NewJWTService()
@@ -27,6 +28,10 @@ func main() {
 	authService := service.NewAuthService(visitorRepository)
 	visitorHandler := handler.NewVisitorHandler(visitorService, jwtService)
 	authHandler := handler.NewAuthHandler(authService, jwtService)
+
+	userRepository := repository.NewRepo(db)
+	userService := service.NewVisitor(userRepository)
+	userHandler := handler.NewVisitor(userService)
 
 	r := gin.Default()
 
@@ -40,6 +45,15 @@ func main() {
 	{
 		visitorRoutes.GET("/profile", visitorHandler.Profile)
 		// visitorRoutes.PUT("/profile", visitorHandler.Update)
+	}
+
+	api := r.Group("/api/visitor", middleware.AuthorizeJWT(jwtService))
+	{
+		api.GET("/get", userHandler.GetVisitors)
+		api.GET("/get/:id", userHandler.GetVisitor)
+		api.POST("/add", userHandler.CreateVisitor)
+		api.PUT("/update/:id", userHandler.UpdateVisitor)
+		api.DELETE("/delete/:id", userHandler.DeleteVisitor)
 	}
 	r.Run()
 }
