@@ -21,4 +21,4 @@ services:
       - DB_PORT=5432
       - DB_DATABASE=library
     depends_on:
-      - task-postgres
+      - library-postgres
